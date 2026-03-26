@@ -37,8 +37,11 @@ class PassengerBogie {
     }
 }
 
+/**
+ *
+ */
 // Example usage
-public class Main {
+class Main {
     public static void main(String[] args) {
         try {
             PassengerBogie sleeper = new PassengerBogie("Sleeper", 72);
