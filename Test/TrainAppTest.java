@@ -1,50 +1,49 @@
-import java.util.Arrays;
 
-// ---------------- UC19: Binary Search ----------------
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-class BinarySearchUtil {
+class SafeSearchTest {
 
-    public static boolean binarySearch(String[] bogieIds, String key) {
+    @Test
+    void testSearch_EmptyArrayThrowsException() {
+        String[] arr = {};
 
-        int low = 0;
-        int high = bogieIds.length - 1;
+        IllegalStateException thrown = assertThrows(
+                IllegalStateException.class,
+                () -> SafeSearchUtil.searchBogie(arr, "BG101")
+        );
 
-        while (low <= high) {
-
-            int mid = low + (high - low) / 2;
-
-            int comparison = key.compareTo(bogieIds[mid]);
-
-            if (comparison == 0) {
-                return true; // Found
-            } else if (comparison > 0) {
-                low = mid + 1; // Search right half
-            } else {
-                high = mid - 1; // Search left half
-            }
-        }
-
-        return false; // Not found
+        assertTrue(thrown.getMessage().contains("No bogies available"));
     }
-}
 
-// ---------------- MAIN ----------------
-public class TrainApp {
-    public static void main(String[] args) {
+    @Test
+    void testSearch_NullArrayThrowsException() {
+        IllegalStateException thrown = assertThrows(
+                IllegalStateException.class,
+                () -> SafeSearchUtil.searchBogie(null, "BG101")
+        );
 
-        String[] bogieIds = {"BG101","BG205","BG309","BG412","BG550"};
+        assertTrue(thrown.getMessage().contains("No bogies available"));
+    }
 
-        // Ensure sorted (MANDATORY)
-        Arrays.sort(bogieIds);
+    @Test
+    void testSearch_BogieFound() {
+        String[] arr = {"BG101","BG205","BG309"};
 
-        String searchKey = "BG309";
+        assertTrue(SafeSearchUtil.searchBogie(arr, "BG205"));
+    }
 
-        boolean found = BinarySearchUtil.binarySearch(bogieIds, searchKey);
+    @Test
+    void testSearch_BogieNotFound() {
+        String[] arr = {"BG101","BG205","BG309"};
 
-        if (found) {
-            System.out.println("Bogie found: " + searchKey);
-        } else {
-            System.out.println("Bogie not found: " + searchKey);
-        }
+        assertFalse(SafeSearchUtil.searchBogie(arr, "BG999"));
+    }
+
+    @Test
+    void testSearch_SingleElementArray() {
+        String[] arr = {"BG101"};
+
+        assertTrue(SafeSearchUtil.searchBogie(arr, "BG101"));
     }
 }
